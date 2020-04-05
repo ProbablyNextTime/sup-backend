@@ -12,9 +12,3 @@ poetry install # install dependencies
 ```
 make idb # drop->create->init->seed
 ```
-
-### API Documentation:
-
-Once your flask dev server is running:
-
-- [Swagger UI](http://localhost:5000/api/swagger) (http://localhost:5000/api/swagger)
