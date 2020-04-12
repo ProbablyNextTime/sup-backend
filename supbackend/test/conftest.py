@@ -1,16 +1,25 @@
 import os
+from unittest.mock import patch, Mock
+
 import sqlalchemy as sa
+import stripe
 from faker import Faker
 import pytest
 
 from supbackend.api import init_views
 from supbackend.create_app import create_app
 from flask_jwt_extended import create_access_token
-from supbackend.db.fixtures import NormalUserFactory
+from supbackend.db.fixtures import (
+    NormalUserFactory,
+    TransportationProviderFactory,
+    TransportationOfferFactory,
+)
 from pytest_factoryboy import register
 from pytest_postgresql.factories import DatabaseJanitor
 
 register(NormalUserFactory)
+register(TransportationProviderFactory)
+register(TransportationOfferFactory)
 
 # for faker
 LOCALE = "en_US"
@@ -62,10 +71,11 @@ def client_unauthenticated(app):
 
 
 @pytest.fixture
-def client(app, user):
+def client(app, user, session):
     # get flask test client
     client = app.test_client()
 
+    session.commit()  # need an id for user
     access_token = create_access_token(identity=user)
 
     # set environ http header to authenticate user
@@ -84,3 +94,19 @@ def user(normal_user_factory, db_session):
     user = normal_user_factory.create()
     db_session.commit()
     return user
+
+
+@pytest.fixture(autouse=True)
+def session(db_session):
+    """Ensure every test is inside a subtransaction giving us a clean slate each test."""
+    yield db_session
+
+
+@pytest.fixture
+def mock_stripe():
+    with patch.object(stripe, "Customer"), patch.object(stripe, "Charge"):
+        with patch.object(stripe, "Customer"), patch.object(
+            stripe.Customer, "create"
+        ) as customer_create_mock:
+            customer_create_mock.return_value = Mock(id="cust_4321")
+            yield

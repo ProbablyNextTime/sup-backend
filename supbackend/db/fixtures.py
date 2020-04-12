@@ -2,6 +2,9 @@
 from faker import Factory as FakerFactory
 import factory
 import random
+
+from supbackend.model import TransportationProvider, TransportationOffer
+from supbackend.model.constant import TransportationOfferStatus, PaymentStatus
 from supbackend.model.user import NormalUser, User
 from supbackend.db import db
 from jetkit.db import Session
@@ -27,6 +30,8 @@ def seed_db():
             f"Created default user with email {DEFAULT_NORMAL_USER_EMAIL} "
             f"with password '{DEFAULT_PASSWORD}'"
         )
+
+    db.session.bulk_save_objects(TransportationOfferFactory.create_batch(50))
 
     db.session.commit()
     print("Database seeded.")
@@ -57,3 +62,25 @@ class NormalUserFactory(UserFactoryFactory):
         model = NormalUser
 
     email = factory.Sequence(lambda n: f"normaluser.{n}@example.com")
+
+
+class TransportationProviderFactory(SQLAFactory):
+    class Meta:
+        model = TransportationProvider
+
+    name = factory.Sequence(lambda n: f"{n}-{faker.word()}")
+
+
+class TransportationOfferFactory(SQLAFactory):
+    class Meta:
+        model = TransportationOffer
+
+    title = factory.LazyAttribute(lambda x: faker.sentence())
+    transportation_provider = factory.SubFactory(TransportationProviderFactory)
+    status = factory.LazyAttribute(
+        lambda x: random.choice(list(TransportationOfferStatus))
+    )
+    payment_status = factory.LazyAttribute(lambda x: random.choice(list(PaymentStatus)))
+    deposit_value_in_usd = factory.LazyAttribute(
+        lambda x: faker.pyint(min_value=0, max_value=9999, step=1)
+    )

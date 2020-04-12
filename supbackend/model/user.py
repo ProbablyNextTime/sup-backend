@@ -1,9 +1,10 @@
 from enum import Enum, unique
-from sqlalchemy.types import Text, Enum as SQLAEnum
-from sqlalchemy import Column
+from typing import Any, Mapping
+
 from jetkit.db.extid import ExtID
 from jetkit.model.user import CoreUser
-from typing import Any, Mapping
+from sqlalchemy import Column
+from sqlalchemy.types import Text, Enum as SQLAEnum
 
 from supbackend.db import db
 
@@ -25,4 +26,5 @@ User.add_create_uuid_extension_trigger()
 
 
 class NormalUser(User):
+
     __mapper_args__ = {"polymorphic_identity": UserType.normal}
