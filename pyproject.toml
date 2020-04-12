@@ -27,6 +27,7 @@ nplusone = "*"
 psycopg2-binary = "*"
 requests = "*"
 sqlalchemy = "*"
+stripe = "^2.45.0"
 
 [tool.poetry.dev-dependencies]
 bento-cli = "*"
