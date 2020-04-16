@@ -5,6 +5,7 @@ Creates a new instance of our Flask app with plugins, blueprints, views, and con
 import logging
 import os
 
+import stripe
 from flask import jsonify
 from flask_migrate import Migrate, MigrateCommand
 
@@ -42,6 +43,8 @@ def create_app(test_config=None) -> App:
 
     init_xray(app)
     init_auth(app)
+
+    stripe.api_key = app.config["STRIPE_KEY_SECRET"]
 
     return app
 

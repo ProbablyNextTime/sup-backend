@@ -52,6 +52,15 @@ class Config:
     NPLUSONE_LOGGER = logging.getLogger("app.nplusone")
     NPLUSONE_LOG_LEVEL = logging.WARNING
 
+    # url to frontend
+    UI_URL = "http://localhost:3000"
+
+    # stripe
+    STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+    STRIPE_KEY_PUBLISHABLE = "pk_test_ldxJgnzzZ2dYRi461ANgaQ8q00KUF9tU1a"
+    STRIPE_KEY_SECRET = os.getenv("STRIPE_KEY_SECRET")
+    IGNORE_STRIPE_WEBHOOK_ERRORS = True
+
 
 class LocalDevConfig(Config):
     """Local development environment config."""
