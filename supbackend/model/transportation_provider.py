@@ -2,12 +2,14 @@ import os
 
 import stripe
 from jetkit.db.extid import ExtID
-from sqlalchemy import Text
+from sqlalchemy import Text, ARRAY
 
 from supbackend.db import db
 
 
 class TransportationProvider(db.Model, ExtID):
+    """Transportation providers post transportation offers, receive payments."""
+
     name = db.Column(Text, unique=True)
     transportation_offers = db.relationship(
         "TransportationOffer", back_populates="transportation_provider"
@@ -15,6 +17,8 @@ class TransportationProvider(db.Model, ExtID):
     stripe_customer_id = db.Column(Text, unique=True)
     stripe_default_source_id = db.Column(Text, unique=True)
     stripe_customer_email = db.Column(Text, unique=True)
+
+    additional_details = db.Column(ARRAY(Text))
 
     @classmethod
     def create_transportation_provider(cls, name: str):

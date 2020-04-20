@@ -131,7 +131,7 @@ description = "Free program analysis focused on bugs that matter to you."
 name = "bento-cli"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "0.10.2"
+version = "0.11.0"
 
 [package.dependencies]
 PyYAML = ">=5.1.2"
@@ -144,7 +144,6 @@ packaging = ">=14.0"
 pre-commit = ">=1.0.0,<=1.18.3"
 psutil = ">=5.6.3,<5.7.0"
 pymmh3 = ">=0.0.5,<0.1.0"
-r2c-lib = "0.0.18a0"
 semantic-version = ">=2.8.0,<2.9.0"
 tqdm = ">=4.36.1,<4.37.0"
 validate-email = ">=1.3,<2.0"
@@ -183,10 +182,10 @@ description = "The AWS SDK for Python"
 name = "boto3"
 optional = false
 python-versions = "*"
-version = "1.12.39"
+version = "1.12.41"
 
 [package.dependencies]
-botocore = ">=1.15.39,<1.16.0"
+botocore = ">=1.15.41,<1.16.0"
 jmespath = ">=0.7.1,<1.0.0"
 s3transfer = ">=0.3.0,<0.4.0"
 
@@ -196,7 +195,7 @@ description = "Low-level, data-driven core of boto 3."
 name = "botocore"
 optional = false
 python-versions = "*"
-version = "1.15.39"
+version = "1.15.41"
 
 [package.dependencies]
 docutils = ">=0.10,<0.16"
@@ -229,7 +228,7 @@ description = "Checks CloudFormation templates for practices and behaviour that 
 name = "cfn-lint"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "0.29.5"
+version = "0.29.6"
 
 [package.dependencies]
 aws-sam-translator = ">=1.21.0"
@@ -307,6 +306,18 @@ python-versions = "*"
 version = "0.3.0"
 
 [[package]]
+category = "main"
+description = "DNS toolkit"
+name = "dnspython"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "1.16.0"
+
+[package.extras]
+DNSSEC = ["pycryptodome", "ecdsa (>=0.13)"]
+IDNA = ["idna (>=2.1)"]
+
+[[package]]
 category = "dev"
 description = "A Python library for the Docker Engine API."
 name = "docker"
@@ -346,6 +357,17 @@ name = "docutils"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 version = "0.15.2"
+
+[[package]]
+category = "main"
+description = "Normalize email addresses, removing ISP specific markup"
+name = "email-normalize"
+optional = false
+python-versions = "*"
+version = "0.2.1"
+
+[package.dependencies]
+dnspython = ">=1.13.0,<2.0"
 
 [[package]]
 category = "main"
@@ -456,6 +478,24 @@ version = "3.0.8"
 [package.dependencies]
 Flask = ">=0.9"
 Six = "*"
+
+[[package]]
+category = "main"
+description = "Reusable CRUD endpoints using flask-rest-api."
+name = "flask-crud"
+optional = false
+python-versions = ">=3.6.0"
+version = "0.0.2"
+
+[package.dependencies]
+Flask = "*"
+flask-rest-api = "*"
+flask_sqlalchemy = "*"
+
+[package.source]
+reference = "a52f850935d7785e765e0d61f1c86b7dfbe6d42c"
+type = "git"
+url = "https://github.com/jetbridge/flask-crud.git"
 
 [[package]]
 category = "main"
@@ -651,26 +691,6 @@ testing = ["packaging", "importlib-resources"]
 
 [[package]]
 category = "dev"
-description = "Read resources from Python packages"
-name = "importlib-resources"
-optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
-version = "1.4.0"
-
-[package.dependencies]
-[package.dependencies.importlib-metadata]
-python = "<3.8"
-version = "*"
-
-[package.dependencies.zipp]
-python = "<3.8"
-version = ">=0.4"
-
-[package.extras]
-docs = ["sphinx", "rst.linker", "jaraco.packaging"]
-
-[[package]]
-category = "dev"
 description = "A port of Ruby on Rails inflector to Python"
 name = "inflection"
 optional = false
@@ -762,7 +782,7 @@ description = "Rapid web application development."
 name = "jetkit-flask"
 optional = false
 python-versions = ">=3.6.0"
-version = "8.0.0"
+version = "9.0.1"
 
 [package.dependencies]
 Flask = "*"
@@ -801,14 +821,6 @@ name = "jmespath"
 optional = false
 python-versions = "*"
 version = "0.9.5"
-
-[[package]]
-category = "dev"
-description = "Diff JSON and JSON-like structures in Python"
-name = "jsondiff"
-optional = false
-python-versions = "*"
-version = "1.2.0"
 
 [[package]]
 category = "dev"
@@ -1385,7 +1397,7 @@ description = "Thin-wrapper around the mock package for easier use with pytest"
 name = "pytest-mock"
 optional = false
 python-versions = ">=3.5"
-version = "3.0.0"
+version = "3.1.0"
 
 [package.dependencies]
 pytest = ">=2.7"
@@ -1474,25 +1486,6 @@ version = "2019.4.13"
 [package.dependencies]
 public = "*"
 setuptools = "*"
-
-[[package]]
-category = "dev"
-description = "Supporting libraries for R2C"
-name = "r2c-lib"
-optional = false
-python-versions = ">=3.6,<4.0"
-version = "0.0.18a0"
-
-[package.dependencies]
-docker = ">=3.7,<4.0"
-gitpython = ">=2.1,<3.0"
-importlib_resources = ">=1.0,<2.0"
-jsondiff = ">=1.1,<2.0"
-jsonschema = ">=3.0,<4.0"
-mypy-extensions = ">=0.4,<0.5"
-requests = ">=2.0,<3.0"
-semantic-version = ">=2.6,<3.0"
-toposort = ">=1.5,<2.0"
 
 [[package]]
 category = "dev"
@@ -1672,14 +1665,6 @@ version = "0.10.0"
 
 [[package]]
 category = "dev"
-description = "Implements a topological sort algorithm."
-name = "toposort"
-optional = false
-python-versions = "*"
-version = "1.5"
-
-[[package]]
-category = "dev"
 description = "Fast, Extensible Progress Meter"
 name = "tqdm"
 optional = false
@@ -1739,11 +1724,11 @@ description = "HTTP library with thread-safe connection pooling, file post, and 
 name = "urllib3"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
-version = "1.25.8"
+version = "1.25.9"
 
 [package.extras]
 brotli = ["brotlipy (>=0.6.0)"]
-secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "ipaddress"]
+secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "pyOpenSSL (>=0.14)", "ipaddress"]
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
 
 [[package]]
@@ -1760,7 +1745,7 @@ description = "Virtual Python Environment builder"
 name = "virtualenv"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
-version = "20.0.17"
+version = "20.0.18"
 
 [package.dependencies]
 appdirs = ">=1.4.3,<2"
@@ -1846,7 +1831,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "f82ea4682f1ae62c49ab226f322fc28a20e98ac764e8eee084af9860a21c7f43"
+content-hash = "16eaa9fa7cf5105b3389da628e69524f644ad171619a1a99f57929124c19611e"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -1893,8 +1878,8 @@ backcall = [
     {file = "backcall-0.1.0.zip", hash = "sha256:bbbf4b1e5cd2bdb08f915895b51081c041bac22394fdfcfdfbe9f14b77c08bf2"},
 ]
 bento-cli = [
-    {file = "bento-cli-0.10.2.tar.gz", hash = "sha256:b2f8874277ca741f2aee862a2b540d319f39f39a82e3a79a1e7dc0f304e2167d"},
-    {file = "bento_cli-0.10.2-py3-none-any.whl", hash = "sha256:42c8ef8ec9eaa813a218ca9cbff5be7d7aa87a7914b440f6a888770cb2e4e3ca"},
+    {file = "bento-cli-0.11.0.tar.gz", hash = "sha256:93ee70d932ac02754518b38073118c043bbdc3ff8c720297e388c34b25fd3516"},
+    {file = "bento_cli-0.11.0-py3-none-any.whl", hash = "sha256:cb4392d203e1b008ac9e279d3e220c9aff4d12a0011c8aa39767b312cc4a3c34"},
 ]
 black = [
     {file = "black-19.10b0-py36-none-any.whl", hash = "sha256:1b30e59be925fafc1ee4565e5e08abef6b03fe455102883820fe5ee2e4734e0b"},
@@ -1904,12 +1889,12 @@ blinker = [
     {file = "blinker-1.4.tar.gz", hash = "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"},
 ]
 boto3 = [
-    {file = "boto3-1.12.39-py2.py3-none-any.whl", hash = "sha256:cdd79a3a7bbe1f33a365f0acfcc75c4405b482b3eb9ce3f4e6b16c418e201ac3"},
-    {file = "boto3-1.12.39.tar.gz", hash = "sha256:970bd7b332e73d7b51077ed36772c634811b38c81b0cc6ed0f910e50d7ebadf8"},
+    {file = "boto3-1.12.41-py2.py3-none-any.whl", hash = "sha256:ef16d7dc5f357faf1b081411d2faf62a01793f79a9d664c8b6b1b3ff37aa5e44"},
+    {file = "boto3-1.12.41.tar.gz", hash = "sha256:c2c1ee703cb0fa03c5df84b7f00eaa462c808be477dc9014c1e8eef269122770"},
 ]
 botocore = [
-    {file = "botocore-1.15.39-py2.py3-none-any.whl", hash = "sha256:e20ba56476b1031ce5ac8e22b59dabc75bd0e03231f124ed6b9ff99fe0b0c96b"},
-    {file = "botocore-1.15.39.tar.gz", hash = "sha256:94232b44e1540b7e043e220bd43f855400d0a243e926b26b3fb72994e971d518"},
+    {file = "botocore-1.15.41-py2.py3-none-any.whl", hash = "sha256:b12a5b642aa210a72d84204da18618276eeae052fbff58958f57d28ef3193034"},
+    {file = "botocore-1.15.41.tar.gz", hash = "sha256:a45a65ba036bc980decfc3ce6c2688a2d5fffd76e4b02ea4d59e63ff0f6896d4"},
 ]
 certifi = [
     {file = "certifi-2020.4.5.1-py2.py3-none-any.whl", hash = "sha256:1d987a998c75633c40847cc966fcf5904906c920a7f17ef374f5aa4282abd304"},
@@ -1920,8 +1905,8 @@ cfgv = [
     {file = "cfgv-3.1.0.tar.gz", hash = "sha256:c8e8f552ffcc6194f4e18dd4f68d9aef0c0d58ae7e7be8c82bee3c5e9edfa513"},
 ]
 cfn-lint = [
-    {file = "cfn-lint-0.29.5.tar.gz", hash = "sha256:9873c82b710c60eacdbed68faebd835e2f0108a037babc1c7ccd3ed7d7e921e5"},
-    {file = "cfn_lint-0.29.5-py3-none-any.whl", hash = "sha256:c101073c5af8eb23fbccb44f5482604384d3593c6298543d072403eb7469b4ef"},
+    {file = "cfn-lint-0.29.6.tar.gz", hash = "sha256:d3a127e19f36cd0492c00aedec9bf2dc42911622d879755b24f6f8ed57e4902c"},
+    {file = "cfn_lint-0.29.6-py3-none-any.whl", hash = "sha256:d753504cb61dc4707259c27a8d0233e0cf056a142d2564cbcec5abda5a0bb96c"},
 ]
 chardet = [
     {file = "chardet-3.0.4-py2.py3-none-any.whl", hash = "sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"},
@@ -1946,6 +1931,10 @@ decorator = [
 distlib = [
     {file = "distlib-0.3.0.zip", hash = "sha256:2e166e231a26b36d6dfe35a48c4464346620f8645ed0ace01ee31822b288de21"},
 ]
+dnspython = [
+    {file = "dnspython-1.16.0-py2.py3-none-any.whl", hash = "sha256:f69c21288a962f4da86e56c4905b49d11aba7938d3d740e80d9e366ee4f1632d"},
+    {file = "dnspython-1.16.0.zip", hash = "sha256:36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01"},
+]
 docker = [
     {file = "docker-3.7.3-py2.py3-none-any.whl", hash = "sha256:2434b396e616a5ef682fbf80e04839a59e8b81880ece5662c33dff34b8863519"},
     {file = "docker-3.7.3.tar.gz", hash = "sha256:a062a9f82dff025f79c2097c46f49f143f8898274db7e66041f78cafee66b962"},
@@ -1958,6 +1947,9 @@ docutils = [
     {file = "docutils-0.15.2-py2-none-any.whl", hash = "sha256:9e4d7ecfc600058e07ba661411a2b7de2fd0fafa17d1a7f7361cd47b1175c827"},
     {file = "docutils-0.15.2-py3-none-any.whl", hash = "sha256:6c4f696463b79f1fb8ba0c594b63840ebd41f059e92b31957c46b74a4599b6d0"},
     {file = "docutils-0.15.2.tar.gz", hash = "sha256:a2aeea129088da402665e92e0b25b04b073c04b2dce4ab65caaa38b7ce2e1a99"},
+]
+email-normalize = [
+    {file = "email_normalize-0.2.1-py2.py3-none-any.whl", hash = "sha256:66dc6e78f8b18b93e8a85adbdc0f658ed5d273d77ebbe65f5ea660403387bf17"},
 ]
 entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},
@@ -1995,6 +1987,7 @@ flask-cors = [
     {file = "Flask-Cors-3.0.8.tar.gz", hash = "sha256:72170423eb4612f0847318afff8c247b38bd516b7737adfc10d1c2cdbb382d16"},
     {file = "Flask_Cors-3.0.8-py2.py3-none-any.whl", hash = "sha256:f4d97201660e6bbcff2d89d082b5b6d31abee04b1b3003ee073a6fd25ad1d69a"},
 ]
+flask-crud = []
 flask-jwt-extended = [
     {file = "Flask-JWT-Extended-3.24.1.tar.gz", hash = "sha256:0aa8ee6fa7eb3be9314e39dd199ac8e19389a95371f9d54e155c7aa635e319dd"},
 ]
@@ -2054,10 +2047,6 @@ importlib-metadata = [
     {file = "importlib_metadata-1.6.0-py2.py3-none-any.whl", hash = "sha256:2a688cbaa90e0cc587f1df48bdc97a6eadccdcd9c35fb3f976a09e3b5016d90f"},
     {file = "importlib_metadata-1.6.0.tar.gz", hash = "sha256:34513a8a0c4962bc66d35b359558fd8a5e10cd472d37aec5f66858addef32c1e"},
 ]
-importlib-resources = [
-    {file = "importlib_resources-1.4.0-py2.py3-none-any.whl", hash = "sha256:dd98ceeef3f5ad2ef4cc287b8586da4ebad15877f351e9688987ad663a0a29b8"},
-    {file = "importlib_resources-1.4.0.tar.gz", hash = "sha256:4019b6a9082d8ada9def02bece4a76b131518866790d58fdda0b5f8c603b36c2"},
-]
 inflection = [
     {file = "inflection-0.4.0-py2.py3-none-any.whl", hash = "sha256:9a15d3598f01220e93f2207c432cfede50daff53137ce660fb8be838ef1ca6cc"},
     {file = "inflection-0.4.0.tar.gz", hash = "sha256:32a5c3341d9583ec319548b9015b7fbdf8c429cbcb575d326c33ae3a0e90d52c"},
@@ -2082,7 +2071,7 @@ jedi = [
     {file = "jedi-0.17.0.tar.gz", hash = "sha256:df40c97641cb943661d2db4c33c2e1ff75d491189423249e989bcea4464f3030"},
 ]
 jetkit-flask = [
-    {file = "JetKit-Flask-8.0.0.tar.gz", hash = "sha256:49cf53f7d69caf1bd5e43f3dcb163cffa7c6125e541814d7b91faddd9024d00e"},
+    {file = "JetKit-Flask-9.0.1.tar.gz", hash = "sha256:bde88ecdd6fdb6585ff8454dbcf80ba8f81e8ef51bf5ec5a27e24b3bf16246b3"},
 ]
 jinja2 = [
     {file = "Jinja2-2.11.2-py2.py3-none-any.whl", hash = "sha256:f0a4641d3cf955324a89c04f3d94663aa4d638abe8f733ecd3582848e1c37035"},
@@ -2091,9 +2080,6 @@ jinja2 = [
 jmespath = [
     {file = "jmespath-0.9.5-py2.py3-none-any.whl", hash = "sha256:695cb76fa78a10663425d5b73ddc5714eb711157e52704d69be03b1a02ba4fec"},
     {file = "jmespath-0.9.5.tar.gz", hash = "sha256:cca55c8d153173e21baa59983015ad0daf603f9cb799904ff057bfb8ff8dc2d9"},
-]
-jsondiff = [
-    {file = "jsondiff-1.2.0.tar.gz", hash = "sha256:34941bc431d10aa15828afe1cbb644977a114e75eef6cc74fb58951312326303"},
 ]
 jsonpatch = [
     {file = "jsonpatch-1.25-py2.py3-none-any.whl", hash = "sha256:cc3a7241010a1fd3f50145a3b33be2c03c1e679faa19934b628bb07d0f64819e"},
@@ -2358,8 +2344,8 @@ pytest-forked = [
     {file = "pytest_forked-1.1.3-py2.py3-none-any.whl", hash = "sha256:1ae25dba8ee2e56fb47311c9638f9e58552691da87e82d25b0ce0e4bf52b7d87"},
 ]
 pytest-mock = [
-    {file = "pytest-mock-3.0.0.tar.gz", hash = "sha256:a4494016753a30231f8519bfd160242a0f3c8fb82ca36e7b6f82a7fb602ac6b8"},
-    {file = "pytest_mock-3.0.0-py2.py3-none-any.whl", hash = "sha256:98e02534f170e4f37d7e1abdfc5973fd4207aa609582291717f643764e71c925"},
+    {file = "pytest-mock-3.1.0.tar.gz", hash = "sha256:ce610831cedeff5331f4e2fc453a5dd65384303f680ab34bee2c6533855b431c"},
+    {file = "pytest_mock-3.1.0-py2.py3-none-any.whl", hash = "sha256:997729451dfc36b851a9accf675488c7020beccda15e11c75632ee3d1b1ccd71"},
 ]
 pytest-postgresql = [
     {file = "pytest_postgresql-2.3.0-py3-none-any.whl", hash = "sha256:f4afd5b8bede11ef8aaf3803a0c87603ee50494144a722b30c7e34dcd63057ee"},
@@ -2408,10 +2394,6 @@ pyyaml = [
 ]
 query-string = [
     {file = "query-string-2019.4.13.tar.gz", hash = "sha256:bb24e4f58849ef6f8219b2446c2bed076d86c97720ae9c3ae918625807394ca8"},
-]
-r2c-lib = [
-    {file = "r2c-lib-0.0.18a0.tar.gz", hash = "sha256:9508070ce1a9cab7df6d12f7163446fdd4c3909a794fcc8824299111ae7fdee5"},
-    {file = "r2c_lib-0.0.18a0-py3-none-any.whl", hash = "sha256:c848c741c294eb0b32ab79ccd5b8381df4ef91646cca33292daea1410adc7416"},
 ]
 regex = [
     {file = "regex-2020.4.4-cp27-cp27m-win32.whl", hash = "sha256:90742c6ff121a9c5b261b9b215cb476eea97df98ea82037ec8ac95d1be7a034f"},
@@ -2511,10 +2493,6 @@ toml = [
     {file = "toml-0.10.0-py2.py3-none-any.whl", hash = "sha256:235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e"},
     {file = "toml-0.10.0.tar.gz", hash = "sha256:229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"},
 ]
-toposort = [
-    {file = "toposort-1.5-py2.py3-none-any.whl", hash = "sha256:d80128b83b411d503b0cdb4a8f172998bc1d3b434b6402a349b8ebd734d51a80"},
-    {file = "toposort-1.5.tar.gz", hash = "sha256:dba5ae845296e3bf37b042c640870ffebcdeb8cd4df45adaa01d8c5476c557dd"},
-]
 tqdm = [
     {file = "tqdm-4.36.1-py2.py3-none-any.whl", hash = "sha256:dd3fcca8488bb1d416aa7469d2f277902f26260c45aa86b667b074cd44b3b115"},
     {file = "tqdm-4.36.1.tar.gz", hash = "sha256:abc25d0ce2397d070ef07d8c7e706aede7920da163c64997585d42d3537ece3d"},
@@ -2557,15 +2535,15 @@ typing-inspect = [
     {file = "typing_inspect-0.5.0.tar.gz", hash = "sha256:811b44f92e780b90cfe7bac94249a4fae87cfaa9b40312765489255045231d9c"},
 ]
 urllib3 = [
-    {file = "urllib3-1.25.8-py2.py3-none-any.whl", hash = "sha256:2f3db8b19923a873b3e5256dc9c2dedfa883e33d87c690d9c7913e1f40673cdc"},
-    {file = "urllib3-1.25.8.tar.gz", hash = "sha256:87716c2d2a7121198ebcb7ce7cccf6ce5e9ba539041cfbaeecfb641dc0bf6acc"},
+    {file = "urllib3-1.25.9-py2.py3-none-any.whl", hash = "sha256:88206b0eb87e6d677d424843ac5209e3fb9d0190d0ee169599165ec25e9d9115"},
+    {file = "urllib3-1.25.9.tar.gz", hash = "sha256:3018294ebefce6572a474f0604c2021e33b3fd8006ecd11d62107a5d2a963527"},
 ]
 validate-email = [
     {file = "validate_email-1.3.tar.gz", hash = "sha256:784719dc5f780be319cdd185dc85dd93afebdb6ebb943811bc4c7c5f9c72aeaf"},
 ]
 virtualenv = [
-    {file = "virtualenv-20.0.17-py2.py3-none-any.whl", hash = "sha256:00cfe8605fb97f5a59d52baab78e6070e72c12ca64f51151695407cc0eb8a431"},
-    {file = "virtualenv-20.0.17.tar.gz", hash = "sha256:c8364ec469084046c779c9a11ae6340094e8a0bf1d844330fc55c1cefe67c172"},
+    {file = "virtualenv-20.0.18-py2.py3-none-any.whl", hash = "sha256:5021396e8f03d0d002a770da90e31e61159684db2859d0ba4850fbea752aa675"},
+    {file = "virtualenv-20.0.18.tar.gz", hash = "sha256:ac53ade75ca189bc97b6c1d9ec0f1a50efe33cbf178ae09452dcd9fd309013c1"},
 ]
 wcwidth = [
     {file = "wcwidth-0.1.9-py2.py3-none-any.whl", hash = "sha256:cafe2186b3c009a04067022ce1dcd79cb38d8d65ee4f4791b8888d6599d1bbe1"},

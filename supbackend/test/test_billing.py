@@ -10,8 +10,10 @@ from supbackend.model import TransportationOffer
 from supbackend.model.constant import PaymentStatus
 
 
-def test_initiate_checkout(client, session, transportation_offer, mock_stripe):
+def test_initiate_checkout(client, session, transportation_offer_factory, mock_stripe):
+    transportation_offer = transportation_offer_factory()
     transportation_offer.payment_status = PaymentStatus.not_paid
+    session.add(transportation_offer)
     session.commit()
 
     SESSION_ID = "ss_1234"  # checkout session ID
@@ -49,8 +51,12 @@ def test_initiate_checkout(client, session, transportation_offer, mock_stripe):
         assert transportation_offer.stripe_checkout_session_id == SESSION_ID
 
 
-def test_transportation_offer_checkout_session_webhook(transportation_offer, session):
+def test_transportation_offer_checkout_session_webhook(
+    transportation_offer_factory, session
+):
+    transportation_offer = transportation_offer_factory()
     transportation_offer.payment_status = PaymentStatus.not_paid
+    session.add(transportation_offer)
     session.commit()
 
     handle_stripe_event(

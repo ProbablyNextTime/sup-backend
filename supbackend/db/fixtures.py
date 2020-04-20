@@ -3,8 +3,18 @@ from faker import Factory as FakerFactory
 import factory
 import random
 
-from supbackend.model import TransportationProvider, TransportationOffer
-from supbackend.model.constant import TransportationOfferStatus, PaymentStatus
+from supbackend.model import (
+    TransportationProvider,
+    TransportationOffer,
+    Cargo,
+    TransportationTag,
+)
+from supbackend.model.constant import (
+    TransportationOfferStatus,
+    PaymentStatus,
+    TransportationTarget,
+)
+from supbackend.model.many_to_many.offer_tag import OfferTag
 from supbackend.model.user import NormalUser, User
 from supbackend.db import db
 from jetkit.db import Session
@@ -31,7 +41,7 @@ def seed_db():
             f"with password '{DEFAULT_PASSWORD}'"
         )
 
-    db.session.bulk_save_objects(TransportationOfferFactory.create_batch(50))
+    db.session.add_all(OfferTagFactory.create_batch(20))
 
     db.session.commit()
     print("Database seeded.")
@@ -64,11 +74,27 @@ class NormalUserFactory(UserFactoryFactory):
     email = factory.Sequence(lambda n: f"normaluser.{n}@example.com")
 
 
+class CargoFactory(SQLAFactory):
+    class Meta:
+        model = Cargo
+
+    name = factory.Sequence(
+        lambda x: f"{x}-{x+100}-{faker.word()}"
+    )  # md5 to avoid dupes
+
+
+class TransportationTagFactory(SQLAFactory):
+    class Meta:
+        model = TransportationTag
+
+    name = factory.Sequence(lambda x: f"{x}-{faker.word()}")  # md5 to avoid dupes
+
+
 class TransportationProviderFactory(SQLAFactory):
     class Meta:
         model = TransportationProvider
 
-    name = factory.Sequence(lambda n: f"{n}-{faker.word()}")
+    name = factory.Sequence(lambda x: f"{x}-{faker.word()}")
 
 
 class TransportationOfferFactory(SQLAFactory):
@@ -84,3 +110,24 @@ class TransportationOfferFactory(SQLAFactory):
     deposit_value_in_usd = factory.LazyAttribute(
         lambda x: faker.pyint(min_value=0, max_value=9999, step=1)
     )
+    price_per_unit_in_usd = factory.LazyAttribute(
+        lambda x: faker.pyint(min_value=0, max_value=500, step=1)
+    )
+    departure_point = factory.LazyAttribute(lambda x: f"{x}-{faker.country()}")
+    destination_point = factory.LazyAttribute(lambda x: f"{x}-{faker.country()}")
+    departure_date = factory.LazyAttribute(lambda x: faker.past_datetime())
+    arrival_date = factory.LazyAttribute(lambda x: faker.future_datetime())
+    pickup_place = factory.LazyAttribute(lambda x: faker.address())
+    delivery_place = factory.LazyAttribute(lambda x: faker.address())
+    additional_info = factory.LazyAttribute(lambda x: faker.sentence())
+    transfer_number = factory.LazyAttribute(lambda x: faker.md5())
+    transportation_target = TransportationTarget.cargo
+    cargo = factory.SubFactory(CargoFactory)
+
+
+class OfferTagFactory(SQLAFactory):
+    class Meta:
+        model = OfferTag
+
+    transportation_offer = factory.SubFactory(TransportationOfferFactory)
+    transportation_tag = factory.SubFactory(TransportationTagFactory)

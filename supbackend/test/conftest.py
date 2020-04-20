@@ -13,6 +13,7 @@ from supbackend.db.fixtures import (
     NormalUserFactory,
     TransportationProviderFactory,
     TransportationOfferFactory,
+    OfferTagFactory,
 )
 from pytest_factoryboy import register
 from pytest_postgresql.factories import DatabaseJanitor
@@ -20,6 +21,7 @@ from pytest_postgresql.factories import DatabaseJanitor
 register(NormalUserFactory)
 register(TransportationProviderFactory)
 register(TransportationOfferFactory)
+register(OfferTagFactory)
 
 # for faker
 LOCALE = "en_US"
