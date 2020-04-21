@@ -1,12 +1,37 @@
 from jetkit.db.extid import ExtID
+from jetkit.db.model import TSTZ
 from sqlalchemy import Text, Integer, ForeignKey, Enum
-
 from supbackend.db import db
-from supbackend.model.constant import TransportationOfferStatus, PaymentStatus
+from supbackend.model.constant import (
+    TransportationOfferStatus,
+    PaymentStatus,
+    TransportationTarget,
+)
 
 
 class TransportationOffer(db.Model, ExtID):
+    """Transportation offer about transporting cargo/people, includes delivery and price details."""
+
     title = db.Column(Text)
+    departure_point = db.Column(Text)
+    destination_point = db.Column(Text)
+    departure_date = db.Column(TSTZ)
+    arrival_date = db.Column(TSTZ)
+    pickup_place = db.Column(Text)
+    delivery_place = db.Column(Text)
+    additional_info = db.Column(Text)
+    transfer_number = db.Column(Text)
+    transportation_target = db.Column(
+        db.Enum(TransportationTarget), nullable=False, server_default="cargo"
+    )
+    cargo_id = db.Column(Integer, ForeignKey("cargo.id", ondelete="SET NULL"))
+    cargo = db.relationship("Cargo", back_populates="transportation_offers")
+    transportation_tags = db.relationship(
+        "TransportationTag",
+        secondary="offer_tag",
+        back_populates="transportation_offers",
+    )
+
     transportation_provider_id = db.Column(
         Integer, ForeignKey("transportation_provider.id", ondelete="SET NULL")
     )
@@ -39,3 +64,6 @@ class TransportationOffer(db.Model, ExtID):
     def get_charge_amount_cents(self) -> int:
         """Convert to cents."""
         return self.deposit_value_in_usd * 100
+
+
+TransportationOffer.add_create_uuid_extension_trigger()

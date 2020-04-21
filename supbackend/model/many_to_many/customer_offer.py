@@ -11,3 +11,6 @@ class CustomerOffer(db.Model, ExtID):
     transportation_offer_id = db.Column(
         Integer, ForeignKey("transportation_offer.id", ondelete="CASCADE")
     )
+
+
+CustomerOffer.add_create_uuid_extension_trigger()

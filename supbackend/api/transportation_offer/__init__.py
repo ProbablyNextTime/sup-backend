@@ -1,12 +1,51 @@
+from typing import List
+
 from flask_smorest import Blueprint, abort
-from flask_crud import ResourceView
+from flask_crud import ResourceView, CollectionView
+from jetkit.api import CursorPage, combined_search_by, sortable_by
+from sqlalchemy.orm import joinedload
 
 from supbackend.api.transportation_offer.schema import TransportationOfferSchema
-from supbackend.model import TransportationOffer
+from supbackend.model import TransportationOffer, Cargo, TransportationTag
+from supbackend.model.many_to_many.offer_tag import OfferTag
 
 blp = Blueprint(
     "Transportation_Offer", __name__, url_prefix="/api/transportation_offer"
 )
+
+
+@blp.route("")
+class TransportationOfferCollection(CollectionView):
+    model = TransportationOffer
+
+    list_enabled = True
+    create_enabled = True
+
+    @blp.response(TransportationOfferSchema(many=True))
+    @blp.paginate(CursorPage)
+    @combined_search_by(
+        TransportationOffer.title,
+        TransportationOffer.departure_point,
+        TransportationOffer.destination_point,
+        TransportationTag.name,
+        Cargo.name,
+        search_parameter_name="query",
+    )
+    @sortable_by(TransportationOffer.arrival_date, TransportationOffer.departure_date)
+    def get(self) -> List[TransportationOffer]:
+        """Get a paginated list of transportation offers."""
+        return (
+            TransportationOffer.query.join(OfferTag)
+            .join(TransportationTag)
+            .join(Cargo)
+            .options(joinedload(TransportationOffer.transportation_tags))
+        )
+
+    @blp.arguments(TransportationOfferSchema)
+    @blp.response(TransportationOfferSchema)
+    def post(self, args: dict) -> TransportationOffer:
+        """Create a transportation offer."""
+        return super().post(args)
 
 
 @blp.route("/<string:pk>")
@@ -23,6 +62,17 @@ class TransportationOfferView(ResourceView):
         return item
 
     @blp.response(TransportationOfferSchema)
-    def get(self, pk: str):
+    def get(self, pk: str) -> TransportationOffer:
         """Get a single offer."""
-        return TransportationOffer.get_by_extid(pk)
+        return super().get(pk)
+
+    @blp.arguments(TransportationOfferSchema)
+    @blp.response(TransportationOfferSchema)
+    def patch(self, args: dict, pk: str) -> TransportationOffer:
+        """Update transportation offer."""
+        return super().patch(args=args, pk=pk)
+
+    @blp.response()
+    def delete(self, pk: str):
+        """Delete transportation offer."""
+        return super().delete(pk)

@@ -14,3 +14,9 @@ class TransportationOfferStatus(Enum):
     opened = auto()
     completed = auto()
     canceled = auto()
+
+
+@unique
+class TransportationTarget(Enum):
+    people = auto()
+    cargo = auto()

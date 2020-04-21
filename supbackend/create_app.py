@@ -7,6 +7,7 @@ import os
 
 import stripe
 from flask import jsonify
+from flask_crud import CRUD
 from flask_migrate import Migrate, MigrateCommand
 
 from .api import api
@@ -35,6 +36,7 @@ def create_app(test_config=None) -> App:
     configure_database(app)
     api.init_app(app)  # flask-smorest
     NPlusOne(app)
+    CRUD(app)
 
     # CLI
     manager = Manager(app)
