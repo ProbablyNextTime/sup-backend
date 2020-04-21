@@ -21,6 +21,12 @@ class User(db.Model, CoreUser, ExtID["User"]):
     avatar_url = db.Column(Text())
     __mapper_args__: Mapping[str, Any] = {"polymorphic_on": _user_type}
 
+    reviews_given = db.relationship(
+        "ProviderReview",
+        back_populates="reviewer",
+        foreign_keys="ProviderReview.reviewer_id",
+    )
+
 
 User.add_create_uuid_extension_trigger()
 

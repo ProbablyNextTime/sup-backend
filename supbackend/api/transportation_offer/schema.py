@@ -15,18 +15,24 @@ from supbackend.model.constant import (
 class TransportationOfferSchema(BaseSchema):
     title = f.Str()
     status = EnumField(TransportationOfferStatus)
-    transportationProvider = f.Nested(TransportationProviderSchema)
-    payment_status = EnumField(PaymentStatus, dump_only=True)
-    deposit_value_in_usd = f.Integer()
-    price_per_unit_in_usd = f.Integer()
-    departure_point = f.Str()
-    destination_point = f.Str()
-    departure_date = f.DateTime()
-    arrival_date = f.DateTime()
-    pickup_place = f.Str()
-    delivery_place = f.Str()
-    additional_info = f.Str()
-    transfer_number = f.Str()
-    transportation_target = EnumField(TransportationTarget)
+    transportationProvider = f.Nested(
+        TransportationProviderSchema, data_key="transportationProvider"
+    )
+    payment_status = EnumField(PaymentStatus, dump_only=True, data_key="paymentStatus")
+    deposit_value_in_usd = f.Integer(data_key="depositValueInUsd")
+    price_per_unit_in_usd = f.Integer(data_key="pricePerValueInUsd")
+    departure_point = f.Str(data_key="departurePoint")
+    destination_point = f.Str(data_key="destinationPoint")
+    departure_date = f.DateTime(data_key="departureDate")
+    arrival_date = f.DateTime(data_key="arrivalDate")
+    pickup_place = f.Str(data_key="pickupPlace")
+    delivery_place = f.Str(data_key="deliveryPlace")
+    additional_info = f.Str(data_key="additionalInfo")
+    transfer_number = f.Str(data_key="transferNumber")
+    transportation_target = EnumField(
+        TransportationTarget, data_key="transportationTarget"
+    )
     cargo = f.Nested(CargoSchema)
-    transportation_tags = f.Nested(TransportationTagSchema(many=True))
+    transportation_tags = f.Nested(
+        TransportationTagSchema(many=True), data_key="transportationTags"
+    )

@@ -8,6 +8,7 @@ from supbackend.model import (
     TransportationOffer,
     Cargo,
     TransportationTag,
+    ProviderReview,
 )
 from supbackend.model.constant import (
     TransportationOfferStatus,
@@ -41,7 +42,8 @@ def seed_db():
             f"with password '{DEFAULT_PASSWORD}'"
         )
 
-    db.session.add_all(OfferTagFactory.create_batch(20))
+    db.session.add_all(OfferTagFactory.create_batch(30))
+    db.session.add_all(ProviderReviewFactory.create_batch(30))
 
     db.session.commit()
     print("Database seeded.")
@@ -55,7 +57,7 @@ class SQLAFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = Session
 
 
-class UserFactoryFactory(SQLAFactory):
+class UserFactory(SQLAFactory):
     class Meta:
         abstract = True
 
@@ -67,7 +69,7 @@ class UserFactoryFactory(SQLAFactory):
     )
 
 
-class NormalUserFactory(UserFactoryFactory):
+class NormalUserFactory(UserFactory):
     class Meta:
         model = NormalUser
 
@@ -79,7 +81,7 @@ class CargoFactory(SQLAFactory):
         model = Cargo
 
     name = factory.Sequence(
-        lambda x: f"{x}-{x+100}-{faker.word()}"
+        lambda x: f"{x}-{x + 100}-{faker.word()}"
     )  # md5 to avoid dupes
 
 
@@ -131,3 +133,12 @@ class OfferTagFactory(SQLAFactory):
 
     transportation_offer = factory.SubFactory(TransportationOfferFactory)
     transportation_tag = factory.SubFactory(TransportationTagFactory)
+
+
+class ProviderReviewFactory(SQLAFactory):
+    class Meta:
+        model = ProviderReview
+
+    reviewed = factory.SubFactory(TransportationProviderFactory)
+    reviewer = factory.SubFactory(NormalUserFactory)
+    review_text = factory.LazyAttribute(lambda x: faker.sentence())

@@ -14,6 +14,7 @@ from supbackend.db.fixtures import (
     TransportationProviderFactory,
     TransportationOfferFactory,
     OfferTagFactory,
+    ProviderReviewFactory,
 )
 from pytest_factoryboy import register
 from pytest_postgresql.factories import DatabaseJanitor
@@ -22,6 +23,7 @@ register(NormalUserFactory)
 register(TransportationProviderFactory)
 register(TransportationOfferFactory)
 register(OfferTagFactory)
+register(ProviderReviewFactory)
 
 # for faker
 LOCALE = "en_US"

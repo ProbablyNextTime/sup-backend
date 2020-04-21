@@ -1,3 +1,5 @@
+from typing import List
+
 from flask_smorest import Blueprint, abort
 from flask_crud import ResourceView, CollectionView
 from jetkit.api import CursorPage, combined_search_by, sortable_by
@@ -30,13 +32,20 @@ class TransportationOfferCollection(CollectionView):
         search_parameter_name="query",
     )
     @sortable_by(TransportationOffer.arrival_date, TransportationOffer.departure_date)
-    def get(self):
+    def get(self) -> List[TransportationOffer]:
+        """Get a paginated list of transportation offers."""
         return (
             TransportationOffer.query.join(OfferTag)
             .join(TransportationTag)
             .join(Cargo)
             .options(joinedload(TransportationOffer.transportation_tags))
         )
+
+    @blp.arguments(TransportationOfferSchema)
+    @blp.response(TransportationOfferSchema)
+    def post(self, args: dict) -> TransportationOffer:
+        """Create a transportation offer."""
+        return super().post(args)
 
 
 @blp.route("/<string:pk>")
@@ -53,6 +62,17 @@ class TransportationOfferView(ResourceView):
         return item
 
     @blp.response(TransportationOfferSchema)
-    def get(self, pk: str):
+    def get(self, pk: str) -> TransportationOffer:
         """Get a single offer."""
         return super().get(pk)
+
+    @blp.arguments(TransportationOfferSchema)
+    @blp.response(TransportationOfferSchema)
+    def patch(self, args: dict, pk: str) -> TransportationOffer:
+        """Update transportation offer."""
+        return super().patch(args=args, pk=pk)
+
+    @blp.response()
+    def delete(self, pk: str):
+        """Delete transportation offer."""
+        return super().delete(pk)

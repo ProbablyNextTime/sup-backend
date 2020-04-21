@@ -20,6 +20,12 @@ class TransportationProvider(db.Model, ExtID):
 
     additional_details = db.Column(ARRAY(Text))
 
+    reviews_received = db.relationship(
+        "ProviderReview",
+        back_populates="reviewed",
+        foreign_keys="ProviderReview.reviewed_id",
+    )
+
     @classmethod
     def create_transportation_provider(cls, name: str):
         """Create transportation provider."""

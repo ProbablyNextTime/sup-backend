@@ -41,25 +41,23 @@ def test_search_for_transportation_offer(client, session, offer_tag_factory):
         assert title in transportation_offer["title"]
 
     # Search by departure point
-    departure_point = sample_data.json[0]["departure_point"]
+    departure_point = sample_data.json[0]["departurePoint"]
     response = client.get(f"/api/transportation_offer?query={departure_point}")
     for transportation_offer in response.json:
-        assert departure_point in transportation_offer["departure_point"]
+        assert departure_point in transportation_offer["departurePoint"]
 
     # Search by destination point
-    destination_point = sample_data.json[0]["destination_point"]
+    destination_point = sample_data.json[0]["destinationPoint"]
     response = client.get(f"/api/transportation_offer?query={destination_point}")
     for transportation_offer in response.json:
-        assert destination_point in transportation_offer["destination_point"]
+        assert destination_point in transportation_offer["destinationPoint"]
 
     # Search by transportation tag
-    tags = sample_data.json[0]["transportation_tags"]
+    tags = sample_data.json[0]["transportationTags"]
     tag = tags[0]["name"]
     response = client.get(f"/api/transportation_offer?query={tag}")
     for transportation_offer in response.json:
-        found_tags = [
-            tag["name"] for tag in transportation_offer["transportation_tags"]
-        ]
+        found_tags = [tag["name"] for tag in transportation_offer["transportationTags"]]
         assert tag in found_tags
 
     # Search by cargo name
