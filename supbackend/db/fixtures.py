@@ -115,8 +115,8 @@ class TransportationOfferFactory(SQLAFactory):
     price_per_unit_in_usd = factory.LazyAttribute(
         lambda x: faker.pyint(min_value=0, max_value=500, step=1)
     )
-    departure_point = factory.LazyAttribute(lambda x: f"{x}-{faker.country()}")
-    destination_point = factory.LazyAttribute(lambda x: f"{x}-{faker.country()}")
+    departure_point = factory.Sequence(lambda x: f"{x}-{faker.country()}")
+    destination_point = factory.Sequence(lambda x: f"{x}-{faker.country()}")
     departure_date = factory.LazyAttribute(lambda x: faker.past_datetime())
     arrival_date = factory.LazyAttribute(lambda x: faker.future_datetime())
     pickup_place = factory.LazyAttribute(lambda x: faker.address())
