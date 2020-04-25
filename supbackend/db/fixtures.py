@@ -43,7 +43,7 @@ def seed_db():
         )
 
     db.session.add_all(OfferTagFactory.create_batch(30))
-    db.session.add_all(ProviderReviewFactory.create_batch(30))
+    create_reviews()
 
     db.session.commit()
     print("Database seeded.")
@@ -89,7 +89,17 @@ class TransportationTagFactory(SQLAFactory):
     class Meta:
         model = TransportationTag
 
-    name = factory.Sequence(lambda x: f"{x}-{faker.word()}")  # md5 to avoid dupes
+    name = factory.Sequence(
+        lambda x: random.choice(
+            [
+                f"{x}-premium",
+                f"{x}-up to 200kg",
+                f"{x}-fastest route",
+                f"{x}-bargain",
+                f"{x}-fragile",
+            ]
+        )
+    )
 
 
 class TransportationProviderFactory(SQLAFactory):
@@ -97,6 +107,9 @@ class TransportationProviderFactory(SQLAFactory):
         model = TransportationProvider
 
     name = factory.Sequence(lambda x: f"{x}-{faker.word()}")
+    additional_details = factory.LazyAttribute(
+        lambda x: [faker.sentence() for _ in range(4)]
+    )
 
 
 class TransportationOfferFactory(SQLAFactory):
@@ -116,6 +129,7 @@ class TransportationOfferFactory(SQLAFactory):
         lambda x: faker.pyint(min_value=0, max_value=500, step=1)
     )
     departure_point = factory.Sequence(lambda x: f"{x}-{faker.country()}")
+    is_premium = factory.LazyAttribute(lambda x: faker.pybool())
     destination_point = factory.Sequence(lambda x: f"{x}-{faker.country()}")
     departure_date = factory.LazyAttribute(lambda x: faker.past_datetime())
     arrival_date = factory.LazyAttribute(lambda x: faker.future_datetime())
@@ -142,3 +156,18 @@ class ProviderReviewFactory(SQLAFactory):
     reviewed = factory.SubFactory(TransportationProviderFactory)
     reviewer = factory.SubFactory(NormalUserFactory)
     review_text = factory.LazyAttribute(lambda x: faker.sentence())
+
+
+def create_reviews():
+    transportation_providers = TransportationProvider.query.all()
+    reviewer = NormalUser.query.first()
+
+    for i in range(len(transportation_providers)):
+        review = ProviderReview(
+            reviewed_id=random.choice(transportation_providers).id,
+            reviewer_id=reviewer.id,
+            review_text="test",
+        )
+        db.session.add(review)
+
+    db.session.commit()

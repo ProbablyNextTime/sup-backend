@@ -15,7 +15,7 @@ from supbackend.model.constant import (
 class TransportationOfferSchema(BaseSchema):
     title = f.Str()
     status = EnumField(TransportationOfferStatus)
-    transportationProvider = f.Nested(
+    transportation_provider = f.Nested(
         TransportationProviderSchema, data_key="transportationProvider"
     )
     payment_status = EnumField(PaymentStatus, dump_only=True, data_key="paymentStatus")
@@ -29,6 +29,7 @@ class TransportationOfferSchema(BaseSchema):
     delivery_place = f.Str(data_key="deliveryPlace")
     additional_info = f.Str(data_key="additionalInfo")
     transfer_number = f.Str(data_key="transferNumber")
+    is_premium = f.Bool(data_key="isPremium")
     transportation_target = EnumField(
         TransportationTarget, data_key="transportationTarget"
     )

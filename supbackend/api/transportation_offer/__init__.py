@@ -6,7 +6,12 @@ from jetkit.api import CursorPage, combined_search_by, sortable_by
 from sqlalchemy.orm import joinedload
 
 from supbackend.api.transportation_offer.schema import TransportationOfferSchema
-from supbackend.model import TransportationOffer, Cargo, TransportationTag
+from supbackend.model import (
+    TransportationOffer,
+    Cargo,
+    TransportationTag,
+    TransportationProvider,
+)
 from supbackend.model.many_to_many.offer_tag import OfferTag
 
 blp = Blueprint(
@@ -29,6 +34,7 @@ class TransportationOfferCollection(CollectionView):
         TransportationOffer.destination_point,
         TransportationTag.name,
         Cargo.name,
+        TransportationProvider.name,
         search_parameter_name="query",
     )
     @sortable_by(TransportationOffer.arrival_date, TransportationOffer.departure_date)
@@ -38,7 +44,12 @@ class TransportationOfferCollection(CollectionView):
             TransportationOffer.query.join(OfferTag)
             .join(TransportationTag)
             .join(Cargo)
-            .options(joinedload(TransportationOffer.transportation_tags))
+            .join(TransportationProvider)
+            .options(
+                joinedload(TransportationOffer.transportation_tags),
+                joinedload(TransportationOffer.cargo),
+                joinedload(TransportationOffer.transportation_provider),
+            )
         )
 
     @blp.arguments(TransportationOfferSchema)

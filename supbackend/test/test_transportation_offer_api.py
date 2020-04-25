@@ -26,6 +26,9 @@ def test_listing_transportation_offers(client, session, offer_tag_factory):
         assert len(page_response.json) == 25
         for transportation_offer in page_response.json:
             assert transportation_offer.get("id")
+            assert transportation_offer.get("transportationProvider")
+            assert transportation_offer.get("cargo")
+            assert transportation_offer.get("transportationTags")
 
 
 def test_search_for_transportation_offer(client, session, offer_tag_factory):
@@ -66,3 +69,15 @@ def test_search_for_transportation_offer(client, session, offer_tag_factory):
     response = client.get(f"/api/transportation_offer?query={cargo_name}")
     for transportation_offer in response.json:
         assert cargo_name in transportation_offer["cargo"]["name"]
+
+    # Search by transportation provider name
+    transportation_provider = sample_data.json[0]["transportationProvider"]
+    transportation_provider_name = transportation_provider["name"]
+    response = client.get(
+        f"/api/transportation_offer?query={transportation_provider_name}"
+    )
+    for transportation_offer in response.json:
+        assert (
+            transportation_provider_name
+            in transportation_offer["transportationProvider"]["name"]
+        )

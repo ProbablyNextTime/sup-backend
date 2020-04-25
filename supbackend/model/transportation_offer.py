@@ -1,6 +1,6 @@
 from jetkit.db.extid import ExtID
 from jetkit.db.model import TSTZ
-from sqlalchemy import Text, Integer, ForeignKey, Enum
+from sqlalchemy import Text, Integer, ForeignKey, Enum, Boolean
 from supbackend.db import db
 from supbackend.model.constant import (
     TransportationOfferStatus,
@@ -21,6 +21,7 @@ class TransportationOffer(db.Model, ExtID):
     delivery_place = db.Column(Text)
     additional_info = db.Column(Text)
     transfer_number = db.Column(Text)
+    is_premium = db.Column(Boolean, server_default="f", nullable=False)
     transportation_target = db.Column(
         db.Enum(TransportationTarget), nullable=False, server_default="cargo"
     )
