@@ -20,7 +20,7 @@ class TransportationOfferSchema(BaseSchema):
     )
     payment_status = EnumField(PaymentStatus, dump_only=True, data_key="paymentStatus")
     deposit_value_in_usd = f.Integer(data_key="depositValueInUsd")
-    price_per_unit_in_usd = f.Integer(data_key="pricePerValueInUsd")
+    price_per_unit_in_usd = f.Integer(data_key="pricePerUnitInUsd")
     departure_point = f.Str(data_key="departurePoint")
     destination_point = f.Str(data_key="destinationPoint")
     departure_date = f.DateTime(data_key="departureDate")
@@ -37,3 +37,7 @@ class TransportationOfferSchema(BaseSchema):
     transportation_tags = f.Nested(
         TransportationTagSchema(many=True), data_key="transportationTags"
     )
+
+
+class UpdateTransportationOfferSchema(BaseSchema):
+    deposit_value_in_usd = f.Integer()

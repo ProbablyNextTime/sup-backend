@@ -5,7 +5,10 @@ from flask_crud import ResourceView, CollectionView
 from jetkit.api import CursorPage, combined_search_by, sortable_by
 from sqlalchemy.orm import joinedload
 
-from supbackend.api.transportation_offer.schema import TransportationOfferSchema
+from supbackend.api.transportation_offer.schema import (
+    TransportationOfferSchema,
+    UpdateTransportationOfferSchema,
+)
 from supbackend.model import (
     TransportationOffer,
     Cargo,
@@ -77,7 +80,7 @@ class TransportationOfferView(ResourceView):
         """Get a single offer."""
         return super().get(pk)
 
-    @blp.arguments(TransportationOfferSchema)
+    @blp.arguments(UpdateTransportationOfferSchema)
     @blp.response(TransportationOfferSchema)
     def patch(self, args: dict, pk: str) -> TransportationOffer:
         """Update transportation offer."""
