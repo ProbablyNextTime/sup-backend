@@ -171,4 +171,3 @@ def test_db(app: App) -> None:
             f"Database configuration is invalid. Using URI: {app.config['SQLALCHEMY_DATABASE_URI']}"
         )
         raise ex
-
