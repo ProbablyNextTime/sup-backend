@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 import logging
 
-CONFIG_EXPECTED_KEYS = ("DATABASE_URL", "OPENAPI_VERSION", "JWT_SECRET_KEY")
+CONFIG_EXPECTED_KEYS = ("SQLALCHEMY_DATABASE_URI", "OPENAPI_VERSION", "JWT_SECRET_KEY")
 # use local "supbackend" DB for local dev
 DEFAULT_DB_URL = "postgresql:///supbackend"
 
@@ -16,9 +16,15 @@ class Config:
     SECRETS_NAME = os.getenv("APP_SECRETS_NAME", "supbackend/dev")
     RDS_SECRETS_NAME = os.getenv("RDS_SECRETS_NAME")
 
+    # use aurora data API?
+    AURORA_SECRET_ARN = os.getenv("AURORA_SECRET_ARN")
+    AURORA_CLUSTER_ARN = os.getenv("AURORA_CLUSTER_ARN")
+    DATABASE_NAME = os.getenv("DATABASE_NAME")
+    AURORA_DATA_API_ENABLED = os.getenv("AURORA_DATA_API_ENABLED", False)
+
     DEV_DB_SCRIPTS_ENABLED = False  # can init-db/seed/etc be run?
 
-    DATABASE_URL = os.getenv("DATABASE_URL", DEFAULT_DB_URL)
+    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI", DEFAULT_DB_URL)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # set SQL_ECHO=1 this to echo queries to stderr

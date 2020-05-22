@@ -3,7 +3,15 @@
 from flask import Flask
 from flask.config import Config
 
+from supbackend.config import ConfigurationValueMissingError
+
 
 class App(Flask):
     config: Config
-    pass
+
+    def get_config_value_or_raise(self, key):
+        """Get a config value or raise an exception if it is not truthy."""
+        val = self.config.get(key)
+        if val:
+            return val
+        raise ConfigurationValueMissingError(key)
