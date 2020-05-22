@@ -76,6 +76,10 @@ def init_auth(app):
 
 def configure_database(app):
     """Set up flask with SQLAlchemy."""
+    # configure options for create_engine
+    engine_opts = app.config.get("SQLALCHEMY_ENGINE_OPTIONS", {})
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = engine_opts
+
     db.init_app(app)  # init sqlalchemy
     app.migrate = Migrate(app, db)  # alembic
 
@@ -86,6 +90,7 @@ def configure_database(app):
         Ensures no open transactions remain.
         """
         db.session.remove()
+    test_db(app)
 
 
 def configure_class(app):
@@ -108,13 +113,14 @@ def configure_class(app):
     app.config.from_object(config_class)
 
 
-def configure_secrets(app):
+def configure_secrets(app: App) -> None:
     if app.config.get("LOAD_RDS_SECRETS"):
         # fetch db config secrets from Secrets Manager
         secret_name = app.config["RDS_SECRETS_NAME"]
+        assert secret_name, "RDS_SECRETS_NAME missing"
         rds_secrets = get_secret(secret_name=secret_name)
         # construct database connection string from secret
-        app.config["DATABASE_URL"] = db_secret_to_url(rds_secrets)
+        app.config["SQLALCHEMY_DATABASE_URI"] = db_secret_to_url(rds_secrets)
 
     if app.config.get("LOAD_APP_SECRETS"):
         # fetch app config secrets from Secrets Manager
@@ -128,7 +134,7 @@ def configure_instance(app):
     app.config.from_pyfile("instance.cfg", silent=True)
 
 
-def configure(app: App, test_config=None):
+def configure(app: App, test_config=None) -> None:
     configure_class(app)
     config = app.config
     if test_config:
@@ -136,10 +142,6 @@ def configure(app: App, test_config=None):
     else:
         configure_secrets(app)
         configure_instance(app)
-
-    # use 'DATABASE_URL' config for SQLAlchemy
-    if "DATABASE_URL" in config and "SQLALCHEMY_DATABASE_URI" not in config:
-        config["SQLALCHEMY_DATABASE_URI"] = config["DATABASE_URL"]
 
     if config.get("SQLALCHEMY_ECHO"):
         logging.basicConfig()
@@ -157,3 +159,16 @@ def init_xray(app: App):
     patcher.patch(("requests", "boto3"))  # xray tracing for external requests
     xray_recorder.configure(service="supbackend")
     XRayMiddleware(app, xray_recorder)
+
+
+def test_db(app: App) -> None:
+    # verify DB works
+    try:
+        with app.app_context():
+            db.session.execute("SELECT 1").scalar()
+    except Exception as ex:
+        log.error(
+            f"Database configuration is invalid. Using URI: {app.config['SQLALCHEMY_DATABASE_URI']}"
+        )
+        raise ex
+
