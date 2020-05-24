@@ -9,6 +9,9 @@ def test_login(client_unauthenticated, user):
     assert response.json.get("access_token")
     assert response.json.get("refresh_token")
 
+    user_response = response.json.get("user")
+    assert user_response.get("email") == user.email
+
     # attempt refresh
     refresh_token = response.json.get("refresh_token")
     response = client_unauthenticated.post(
