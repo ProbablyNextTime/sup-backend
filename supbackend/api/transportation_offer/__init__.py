@@ -1,5 +1,6 @@
 from typing import List
 
+from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 from flask_crud import ResourceView, CollectionView
 from jetkit.api import CursorPage, combined_search_by, sortable_by
@@ -41,6 +42,7 @@ class TransportationOfferCollection(CollectionView):
         search_parameter_name="query",
     )
     @sortable_by(TransportationOffer.arrival_date, TransportationOffer.departure_date)
+    @jwt_required
     def get(self) -> List[TransportationOffer]:
         """Get a paginated list of transportation offers."""
         return (
@@ -57,6 +59,7 @@ class TransportationOfferCollection(CollectionView):
 
     @blp.arguments(TransportationOfferSchema)
     @blp.response(TransportationOfferSchema)
+    @jwt_required
     def post(self, args: dict) -> TransportationOffer:
         """Create a transportation offer."""
         return super().post(args)
@@ -76,17 +79,20 @@ class TransportationOfferView(ResourceView):
         return item
 
     @blp.response(TransportationOfferSchema)
+    @jwt_required
     def get(self, pk: str) -> TransportationOffer:
         """Get a single offer."""
         return super().get(pk)
 
     @blp.arguments(UpdateTransportationOfferSchema)
     @blp.response(TransportationOfferSchema)
+    @jwt_required
     def patch(self, args: dict, pk: str) -> TransportationOffer:
         """Update transportation offer."""
         return super().patch(args=args, pk=pk)
 
     @blp.response()
+    @jwt_required
     def delete(self, pk: str):
         """Delete transportation offer."""
         return super().delete(pk)
