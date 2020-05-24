@@ -3,6 +3,7 @@ import warnings
 from pprint import pprint
 import stripe
 from flask import current_app, request
+from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 from supbackend.api.billing.schema import InitiateCheckoutResponse
 from supbackend.db import db
@@ -21,6 +22,7 @@ log = logging.getLogger(__name__)
     methods=["POST"],
 )
 @blp.response(InitiateCheckoutResponse)
+@jwt_required
 def initiate_transportation_offer_checkout(transportation_offer_extid: str):
     """Create a stripe checkout session, that a user can use to purchase."""
     transportation_offer = TransportationOffer.get_by_extid(transportation_offer_extid)

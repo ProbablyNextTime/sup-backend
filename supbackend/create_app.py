@@ -90,6 +90,7 @@ def configure_database(app):
         Ensures no open transactions remain.
         """
         db.session.remove()
+
     test_db(app)
 
 
