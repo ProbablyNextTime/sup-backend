@@ -16,6 +16,7 @@ from supbackend.model import (
     TransportationTag,
     TransportationProvider,
 )
+from supbackend.model.constant import PaymentStatus
 from supbackend.model.many_to_many.offer_tag import OfferTag
 
 blp = Blueprint(
@@ -46,7 +47,7 @@ class TransportationOfferCollection(CollectionView):
     def get(self) -> List[TransportationOffer]:
         """Get a paginated list of transportation offers."""
         return (
-            TransportationOffer.query.join(OfferTag)
+            TransportationOffer.query.filter(TransportationOffer.payment_status==PaymentStatus.not_paid, TransportationOffer.deposit_value_in_usd.isnot(None)).join(OfferTag)
             .join(TransportationTag)
             .join(Cargo)
             .join(TransportationProvider)

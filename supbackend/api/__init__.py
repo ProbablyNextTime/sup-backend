@@ -4,6 +4,7 @@ api = Api()
 
 
 def init_views():
+    # Kek
     from . import monitor, auth, billing, transportation_offer
 
     apis = (monitor, auth, billing, transportation_offer)

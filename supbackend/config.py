@@ -13,7 +13,7 @@ class Config:
     # load more config from secrets manager?
     LOAD_APP_SECRETS = os.getenv("LOAD_APP_SECRETS", False)
     LOAD_RDS_SECRETS = os.getenv("LOAD_RDS_SECRETS", False)
-    SECRETS_NAME = os.getenv("APP_SECRETS_NAME", "supbackend/dev")
+    APP_SECRETS_NAME = "supbackend/dev"
     RDS_SECRETS_NAME = os.getenv("RDS_SECRETS_NAME")
 
     # use aurora data API?
@@ -59,12 +59,12 @@ class Config:
     NPLUSONE_LOG_LEVEL = logging.WARNING
 
     # url to frontend
-    UI_URL = "http://localhost:3000"
+    UI_URL = "https://friendly-fermat-97e58c.netlify.app"
 
     # stripe
-    STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+    STRIPE_WEBHOOK_SECRET = "whsec_K6PmMDOZjiuRL93MDQDkohnyO9QLyZ7n"
     STRIPE_KEY_PUBLISHABLE = "pk_test_ldxJgnzzZ2dYRi461ANgaQ8q00KUF9tU1a"
-    STRIPE_KEY_SECRET = os.getenv("STRIPE_KEY_SECRET")
+    STRIPE_KEY_SECRET = "sk_test_GfiDYYHXDcwhOrTWuX4Vs5ec000tjm16RR"
     IGNORE_STRIPE_WEBHOOK_ERRORS = True
 
 
@@ -85,7 +85,7 @@ class ProductionConfig(Config):
     """AWS production environment and DB."""
 
     # name of Secrets Manager secretID for config
-    APP_SECRETS_NAME = "supbackend/prd"
+    APP_SECRETS_NAME = "supbackend/dev"
     LOAD_APP_SECRETS = False
     DEV_DB_SCRIPTS_ENABLED = False
 

@@ -48,6 +48,13 @@ Resources:
         PasswordLength: 16
         ExcludeCharacters: '"@/\%:\\;'
 
+  # Dev secret
+  AppSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: "App secret"
+      Name: ${self:custom.secrets.dev}
+
   SecretRDSInstanceAttachment:
     Type: AWS::SecretsManager::SecretTargetAttachment
     Properties:

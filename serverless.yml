@@ -26,6 +26,7 @@ custom:
   secrets:
     prefix: "${self:service}/${self:provider.stage}"
     rds: "${self:custom.secrets.prefix}/rds/credentials"
+    dev: "${self:custom.secrets.prefix}/dev"
   vpc:
     securityGroupIds:
       - !GetAtt LambdaSecurityGroup.GroupId
@@ -111,6 +112,7 @@ provider:
   environment:
     SECRET_PREFIX: ${self:custom.secrets.prefix}
     RDS_SECRETS_NAME: ${self:custom.secrets.rds}
+    APP_SECRETS_NAME: ${self:custom.secrets.dev}
 
     # aurora data API credentials
     AURORA_SECRET_ARN: !Ref RDSInstanceSecret
@@ -126,7 +128,7 @@ provider:
 
     STAGE: ${self:provider.stage}
     XRAY: ${self:custom.xray}
-#    LOAD_APP_SECRETS: true  # enable to load user-defined secrets
+    LOAD_APP_SECRETS: true  # enable to load user-defined secrets
     # SQL_ECHO: true  # enable to print all SQL queries
 
   iamRoleStatements:
@@ -135,6 +137,7 @@ provider:
       Resource:
         - "arn:aws:secretsmanager:#{AWS::Region}:#{AWS::AccountId}:secret:${self:custom.secrets.prefix}/*"
         - "arn:aws:secretsmanager:#{AWS::Region}:#{AWS::AccountId}:secret:${self:custom.secrets.prefix}/dev-*"
+        - "arn:aws:secretsmanager:#{AWS::Region}:#{AWS::AccountId}:secret:supbackend/dev-86P6tZ"
     - Effect: Allow
       Action:
         - rds-data:ExecuteStatement
