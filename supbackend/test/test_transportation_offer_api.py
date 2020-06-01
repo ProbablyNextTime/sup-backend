@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+from supbackend.model import TransportationOffer
 from supbackend.model.constant import PaymentStatus
 
 TOTAL = 100
@@ -94,3 +96,33 @@ def test_search_for_transportation_offer(client, session, offer_tag_factory):
             transportation_provider_name
             in transportation_offer["transportationProvider"]["name"]
         )
+
+
+def test_adding_transportation_offer(client, session):
+    departure_date = datetime.now(timezone.utc)
+    arrival_date = datetime.now(timezone.utc)
+    new_transportation_tag_json = {
+        "departure_date": str(departure_date),
+        "arrival_date": str(arrival_date),
+        "pickup_place": "somewhere",
+        "delivery_place": "test",
+        "price_per_unit_in_usd": 10,
+        "cargo": "test",
+        "tags": [{"name": "tag1"}, {"name": "tag2"}, {"name": "tag3"}],
+        "transportation_target": "cargo",
+    }
+
+    print(f"ATTENTION: {new_transportation_tag_json}")
+
+    response = client.post(
+        "/api/transportation_offer", json=new_transportation_tag_json
+    )
+
+    assert response.status_code == 200
+
+    offer = TransportationOffer.query.first()
+
+    assert offer.cargo.name == new_transportation_tag_json.get("cargo")
+    assert offer.departure_date == departure_date
+    assert offer.arrival_date == arrival_date
+    assert len(offer.transportation_tags) == 3

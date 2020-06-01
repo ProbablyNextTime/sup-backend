@@ -10,5 +10,14 @@ class Cargo(db.Model, ExtID):
         "TransportationOffer", back_populates="cargo"
     )
 
+    @classmethod
+    def upsert(cls, *, name: str):
+        return cls.upsert_row(
+            row_class=cls,
+            index_elements=["name"],
+            set_=dict(name=name),
+            values=dict(name=name),
+        )
+
 
 Cargo.add_create_uuid_extension_trigger()

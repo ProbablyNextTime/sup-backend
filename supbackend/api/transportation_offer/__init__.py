@@ -1,3 +1,4 @@
+import uuid
 from typing import List
 
 from flask_jwt_extended import jwt_required
@@ -9,7 +10,9 @@ from sqlalchemy.orm import joinedload
 from supbackend.api.transportation_offer.schema import (
     TransportationOfferSchema,
     UpdateTransportationOfferSchema,
+    CreateTransportationOfferSchema,
 )
+from supbackend.db import db
 from supbackend.model import (
     TransportationOffer,
     Cargo,
@@ -62,12 +65,41 @@ class TransportationOfferCollection(CollectionView):
             )
         )
 
-    @blp.arguments(TransportationOfferSchema)
+    @blp.arguments(CreateTransportationOfferSchema)
     @blp.response(TransportationOfferSchema)
     @jwt_required
     def post(self, args: dict) -> TransportationOffer:
         """Create a transportation offer."""
-        return super().post(args)
+        print(args)
+        cargo = Cargo(name=args.get("cargo"))
+        transportation_offer = TransportationOffer(
+            transfer_number=uuid.uuid4().hex,
+            departure_date=args.get("departure_date"),
+            arrival_date=args.get("arrival_date"),
+            pickup_place=args.get("pickup_place"),
+            delivery_place=args.get("delivery_place"),
+            price_per_unit_in_usd=args.get("price_per_unit_in_usd"),
+            departure_point=args.get("departure_point"),
+            destination_point=args.get("destination_point"),
+            cargo=cargo,
+            transportation_target=args.get("transportation_target"),
+        )
+
+        db.session.add(cargo)
+        db.session.add(transportation_offer)
+
+        for tag in args.get("transportation_tags"):  # type:ignore
+            to_be_added_tag: TransportationTag = TransportationTag(name=tag.get("name"))
+            db.session.add(to_be_added_tag)
+            offer_tag = OfferTag(
+                transportation_offer=transportation_offer,
+                transportation_tag=to_be_added_tag,
+            )
+            db.session.add(offer_tag)
+
+        db.session.commit()
+
+        return transportation_offer
 
 
 @blp.route("/<string:pk>")
