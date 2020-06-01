@@ -5,9 +5,9 @@ api = Api()
 
 def init_views():
     # Kek
-    from . import monitor, auth, billing, transportation_offer
+    from . import monitor, auth, billing, transportation_offer, transportation_tag
 
-    apis = (monitor, auth, billing, transportation_offer)
+    apis = (monitor, auth, billing, transportation_offer, transportation_tag)
 
     # get exported "blp" blueprint objects
     for blp in (a.blp for a in apis):

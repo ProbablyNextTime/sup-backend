@@ -89,17 +89,7 @@ class TransportationTagFactory(SQLAFactory):
     class Meta:
         model = TransportationTag
 
-    name = factory.Sequence(
-        lambda x: random.choice(
-            [
-                f"{x}-premium",
-                f"{x}-up to 200kg",
-                f"{x}-fastest route",
-                f"{x}-bargain",
-                f"{x}-fragile",
-            ]
-        )
-    )
+    name = factory.LazyAttribute(lambda x: f"{x}-{faker.word()}")
 
 
 class TransportationProviderFactory(SQLAFactory):
