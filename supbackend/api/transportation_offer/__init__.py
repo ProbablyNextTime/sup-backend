@@ -47,7 +47,11 @@ class TransportationOfferCollection(CollectionView):
     def get(self) -> List[TransportationOffer]:
         """Get a paginated list of transportation offers."""
         return (
-            TransportationOffer.query.filter(TransportationOffer.payment_status==PaymentStatus.not_paid, TransportationOffer.deposit_value_in_usd.isnot(None)).join(OfferTag)
+            TransportationOffer.query.filter(
+                TransportationOffer.payment_status == PaymentStatus.not_paid,
+                TransportationOffer.deposit_value_in_usd.isnot(None),
+            )
+            .join(OfferTag)
             .join(TransportationTag)
             .join(Cargo)
             .join(TransportationProvider)
@@ -68,7 +72,7 @@ class TransportationOfferCollection(CollectionView):
 
 @blp.route("/<string:pk>")
 class TransportationOfferView(ResourceView):
-    model = TransportationOffer
+    model = TransportationOffer()
     get_enabled: bool = True
     update_enabled: bool = True
 

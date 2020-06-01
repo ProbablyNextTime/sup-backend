@@ -1,9 +1,11 @@
+from supbackend.model.constant import PaymentStatus
+
 TOTAL = 100
 PER_PAGE = 25
 
 
 def test_getting_transportation_offer(client, session, transportation_offer_factory):
-    toffer1 = transportation_offer_factory()
+    toffer1 = transportation_offer_factory(payment_status=PaymentStatus.not_paid)
     session.add(toffer1)
     session.commit()
 
@@ -14,8 +16,19 @@ def test_getting_transportation_offer(client, session, transportation_offer_fact
     assert response.status_code == 200
 
 
-def test_listing_transportation_offers(client, session, offer_tag_factory):
-    session.add_all([offer_tag_factory() for _ in range(TOTAL)])
+def test_listing_transportation_offers(
+    client, session, offer_tag_factory, transportation_offer_factory
+):
+    session.add_all(
+        [
+            offer_tag_factory(
+                transportation_offer=transportation_offer_factory(
+                    payment_status=PaymentStatus.not_paid
+                )
+            )
+            for _ in range(TOTAL)
+        ]
+    )
     session.commit()
 
     for page in range(int(TOTAL / PER_PAGE)):
@@ -35,7 +48,7 @@ def test_search_for_transportation_offer(client, session, offer_tag_factory):
     session.add_all([offer_tag_factory() for _ in range(TOTAL)])
     session.commit()
 
-    sample_data = client.get(f"/api/transportation_offer")
+    sample_data = client.get("/api/transportation_offer")
 
     # Search by transportation offer title
     title = sample_data.json[0]["title"]
