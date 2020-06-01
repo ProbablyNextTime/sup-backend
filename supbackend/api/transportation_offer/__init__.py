@@ -89,8 +89,9 @@ class TransportationOfferCollection(CollectionView):
         db.session.add(transportation_offer)
 
         for tag in args.get("transportation_tags"):  # type:ignore
-            to_be_added_tag: TransportationTag = TransportationTag(name=tag.get("name"))
-            db.session.add(to_be_added_tag)
+            to_be_added_tag: TransportationTag = TransportationTag.query.filter(
+                TransportationTag.name == tag.get("name")
+            ).one_or_none()
             offer_tag = OfferTag(
                 transportation_offer=transportation_offer,
                 transportation_tag=to_be_added_tag,

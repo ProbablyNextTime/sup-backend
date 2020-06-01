@@ -98,7 +98,10 @@ def test_search_for_transportation_offer(client, session, offer_tag_factory):
         )
 
 
-def test_adding_transportation_offer(client, session):
+def test_adding_transportation_offer(client, session, transportation_tag_factory):
+    tag1 = transportation_tag_factory()
+    tag2 = transportation_tag_factory()
+    tag3 = transportation_tag_factory()
     departure_date = datetime.now(timezone.utc)
     arrival_date = datetime.now(timezone.utc)
     new_transportation_tag_json = {
@@ -108,8 +111,10 @@ def test_adding_transportation_offer(client, session):
         "delivery_place": "test",
         "price_per_unit_in_usd": 10,
         "cargo": "test",
-        "tags": [{"name": "tag1"}, {"name": "tag2"}, {"name": "tag3"}],
+        "tags": [{"name": tag1.name}, {"name": tag2.name}, {"name": tag3.name}],
         "transportation_target": "cargo",
+        "destination_point": "somewhere",
+        "departure_point": "something",
     }
 
     print(f"ATTENTION: {new_transportation_tag_json}")
