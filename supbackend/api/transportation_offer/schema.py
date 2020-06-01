@@ -39,5 +39,18 @@ class TransportationOfferSchema(BaseSchema):
     )
 
 
+class CreateTransportationOfferSchema(BaseSchema):
+    departure_date = f.DateTime()
+    arrival_date = f.DateTime()
+    pickup_place = f.Str()
+    delivery_place = f.Str()
+    price_per_unit_in_usd = f.Integer()
+    cargo = f.Str()
+    transportation_tags = f.Nested(TransportationTagSchema(many=True), data_key="tags")
+    departure_point = f.Str()
+    destination_point = f.Str()
+    transportation_target = EnumField(TransportationTarget)
+
+
 class UpdateTransportationOfferSchema(BaseSchema):
     deposit_value_in_usd = f.Integer()
