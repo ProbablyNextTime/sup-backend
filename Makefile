@@ -47,3 +47,4 @@ seed-dev: deploy-dev
 deploy-prd:
 	sls deploy --stage prd
 	sls --stage prd invoke -f migrate
+

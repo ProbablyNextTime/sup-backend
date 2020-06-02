@@ -12,6 +12,7 @@ class Cargo(db.Model, ExtID):
 
     @classmethod
     def upsert(cls, *, name: str):
+        """Upsert cargo."""
         return cls.upsert_row(
             row_class=cls,
             index_elements=["name"],

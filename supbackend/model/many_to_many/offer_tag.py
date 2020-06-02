@@ -26,6 +26,7 @@ class OfferTag(db.Model, ExtID):
     def upsert(
         cls, *, transportation_offer_id: int, transportation_tag_id: int,
     ):
+        """Upsert offer tags."""
         values = dict(
             transportation_offer_id=transportation_offer_id,
             transportation_tag_id=transportation_tag_id,

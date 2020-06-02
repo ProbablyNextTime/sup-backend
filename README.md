@@ -1,4 +1,6 @@
-## Quickstart:
+# SUP Project Backend
+
+Logistics marketplace powered by Typescript and React
 
 ### Prerequisites:
 
@@ -7,8 +9,15 @@ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poet
 poetry install # install dependencies
 ```
 
-### Database:
 
-```
-make idb # drop->create->init->seed
-```
+## Quickstart:
+
+- `make idb # initialise database`
+ 
+- `make run # run the app`
+
+## Useful stuff
+
+- `make deploy-dev # deploy the dev stage`
+
+- `make hooks # install pre-commit hooks`

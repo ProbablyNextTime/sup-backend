@@ -74,6 +74,7 @@ class TransportationOffer(db.Model, ExtID):
         transportation_target: TransportationTarget,
         cargo_id: int,
     ) -> "TransportationOffer":
+        """Upsert transportation offers."""
         values = dict(
             transfer_number=transfer_number,
             departure_date=departure_date,

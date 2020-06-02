@@ -42,7 +42,8 @@ def seed_db():
             f"with password '{DEFAULT_PASSWORD}'"
         )
 
-    db.session.add_all(OfferTagFactory.create_batch(30))
+    # db.session.add_all(OfferTagFactory.create_batch(30))
+    create_tags_and_offers()
     create_reviews()
 
     db.session.commit()
@@ -96,7 +97,7 @@ class TransportationProviderFactory(SQLAFactory):
     class Meta:
         model = TransportationProvider
 
-    name = factory.Sequence(lambda x: f"{x}-{faker.word()}")
+    name = factory.Sequence(lambda x: faker.company())
     additional_details = factory.LazyAttribute(
         lambda x: [faker.sentence() for _ in range(4)]
     )
@@ -118,13 +119,13 @@ class TransportationOfferFactory(SQLAFactory):
     price_per_unit_in_usd = factory.LazyAttribute(
         lambda x: faker.pyint(min_value=0, max_value=500, step=1)
     )
-    departure_point = factory.Sequence(lambda x: f"{x}-{faker.country()}")
+    departure_point = factory.Sequence(lambda x: faker.city())
     is_premium = factory.LazyAttribute(lambda x: faker.pybool())
-    destination_point = factory.Sequence(lambda x: f"{x}-{faker.country()}")
+    destination_point = factory.Sequence(lambda x: faker.city())
     departure_date = factory.LazyAttribute(lambda x: faker.past_datetime())
     arrival_date = factory.LazyAttribute(lambda x: faker.future_datetime())
-    pickup_place = factory.LazyAttribute(lambda x: faker.address())
-    delivery_place = factory.LazyAttribute(lambda x: faker.address())
+    pickup_place = factory.LazyAttribute(lambda x: faker.street_address())
+    delivery_place = factory.LazyAttribute(lambda x: faker.street_address())
     additional_info = factory.LazyAttribute(lambda x: faker.sentence())
     transfer_number = factory.LazyAttribute(lambda x: faker.md5())
     transportation_target = TransportationTarget.cargo
@@ -159,5 +160,37 @@ def create_reviews():
             review_text="test",
         )
         db.session.add(review)
+
+    db.session.commit()
+
+
+def create_tags_and_offers():
+    tags = [
+        "hot",
+        "heavy-weight",
+        "passenger",
+        "cargo",
+        "long-range",
+        "short-range",
+        "express",
+        "light-weight",
+        "money-back",
+        "recommended",
+    ]
+
+    for tag in tags:
+        new_tag = TransportationTag(name=tag)
+        db.session.add(new_tag)
+
+    tags = TransportationTag.query.all()
+
+    for _ in range(50):
+        offer = TransportationOfferFactory()
+        for _ in range(3):
+            to_be_added_tag = random.choice(tags)
+            if to_be_added_tag not in offer.transportation_tags:
+                offer.transportation_tags.append(to_be_added_tag)
+
+        db.session.add(offer)
 
     db.session.commit()
