@@ -72,6 +72,9 @@ class TransportationOfferCollection(CollectionView):
         """Create a transportation offer."""
         print(args)
         cargo = Cargo(name=args.get("cargo"))
+        transportation_provider = (
+            TransportationProvider.query.first()
+        )  # TODO: use current user to set this
         transportation_offer = TransportationOffer(
             transfer_number=uuid.uuid4().hex,
             departure_date=args.get("departure_date"),
@@ -83,6 +86,7 @@ class TransportationOfferCollection(CollectionView):
             destination_point=args.get("destination_point"),
             cargo=cargo,
             transportation_target=args.get("transportation_target"),
+            transportation_provider=transportation_provider,
         )
 
         db.session.add(cargo)
