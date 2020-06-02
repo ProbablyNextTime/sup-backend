@@ -2,8 +2,8 @@ from datetime import datetime, timezone
 from supbackend.model import TransportationOffer
 from supbackend.model.constant import PaymentStatus
 
-TOTAL = 100
-PER_PAGE = 25
+TOTAL = 25
+PER_PAGE = 5
 
 
 def test_getting_transportation_offer(client, session, transportation_offer_factory):
@@ -38,7 +38,7 @@ def test_listing_transportation_offers(
             f"/api/transportation_offer?page_size={PER_PAGE}&page={page + 1}"
         )
         assert page_response.status_code == 200
-        assert len(page_response.json) == 25
+        assert len(page_response.json) == PER_PAGE
         for transportation_offer in page_response.json:
             assert transportation_offer.get("id")
             assert transportation_offer.get("transportationProvider")
