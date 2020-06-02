@@ -16,6 +16,7 @@ class TransportationTag(db.Model, ExtID):
 
     @classmethod
     def upsert(cls, *, name: str):
+        """Upsert transportation tags."""
         return cls.upsert_row(
             row_class=cls,
             index_elements=["name"],
