@@ -109,10 +109,8 @@ class TransportationOfferFactory(SQLAFactory):
 
     title = factory.LazyAttribute(lambda x: faker.sentence())
     transportation_provider = factory.SubFactory(TransportationProviderFactory)
-    status = factory.LazyAttribute(
-        lambda x: random.choice(list(TransportationOfferStatus))
-    )
-    payment_status = factory.LazyAttribute(lambda x: random.choice(list(PaymentStatus)))
+    status = factory.LazyAttribute(lambda x: TransportationOfferStatus.opened)
+    payment_status = factory.LazyAttribute(lambda x: PaymentStatus.not_paid)
     deposit_value_in_usd = factory.LazyAttribute(
         lambda x: faker.pyint(min_value=0, max_value=9999, step=1)
     )
