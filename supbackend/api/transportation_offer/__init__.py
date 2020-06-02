@@ -1,6 +1,5 @@
 import uuid
 from typing import List
-
 from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 from flask_crud import ResourceView, CollectionView
@@ -72,7 +71,6 @@ class TransportationOfferCollection(CollectionView):
     @jwt_required
     def post(self, args: dict) -> TransportationOffer:
         """Create a transportation offer."""
-        print(args)
         cargo = Cargo(name=args.get("cargo"))
         transportation_provider = (
             TransportationProvider.query.first()
