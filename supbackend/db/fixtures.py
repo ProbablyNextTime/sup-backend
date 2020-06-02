@@ -128,7 +128,9 @@ class TransportationOfferFactory(SQLAFactory):
     delivery_place = factory.LazyAttribute(lambda x: faker.street_address())
     additional_info = factory.LazyAttribute(lambda x: faker.sentence())
     transfer_number = factory.LazyAttribute(lambda x: faker.md5())
-    transportation_target = TransportationTarget.cargo
+    transportation_target = factory.LazyAttribute(
+        lambda x: random.choice(list(TransportationTarget))
+    )
     cargo = factory.SubFactory(CargoFactory)
 
 
