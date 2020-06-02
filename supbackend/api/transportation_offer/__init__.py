@@ -5,6 +5,7 @@ from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 from flask_crud import ResourceView, CollectionView
 from jetkit.api import CursorPage, combined_search_by, sortable_by
+from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 
 from supbackend.api.transportation_offer.schema import (
@@ -54,6 +55,7 @@ class TransportationOfferCollection(CollectionView):
                 TransportationOffer.payment_status == PaymentStatus.not_paid,
                 TransportationOffer.deposit_value_in_usd.isnot(None),
             )
+            .order_by(desc(TransportationOffer.created_at))
             .join(OfferTag)
             .join(TransportationTag)
             .join(Cargo)
