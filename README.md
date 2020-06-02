@@ -1,6 +1,6 @@
 # SUP Project Backend
 
-Logistics marketplace powered by Typescript and React
+Logistics marketplace powered by Flask and Serverless Framework
 
 ### Prerequisites:
 
