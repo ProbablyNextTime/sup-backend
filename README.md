@@ -16,6 +16,9 @@ poetry install # install dependencies
  
 - `make run # run the app`
 
+## API docs
+`http://localhost:5000/api/swagger`
+
 ## Useful stuff
 
 - `make deploy-dev # deploy the dev stage`
