@@ -59,7 +59,7 @@ class Config:
     NPLUSONE_LOG_LEVEL = logging.WARNING
 
     # url to frontend
-    UI_URL = "https://friendly-fermat-97e58c.netlify.app"
+    UI_URL = "https://admiring-ptolemy-a82145.netlify.app"
 
     # stripe
     STRIPE_WEBHOOK_SECRET = "whsec_K6PmMDOZjiuRL93MDQDkohnyO9QLyZ7n"
