@@ -185,7 +185,7 @@ functions:
 
   migrate:
     handler: supbackend.commands.migrate_handler
-    timeout: 900
+    timeout: 300
     layers: ${self:custom.layers.default}
     vpc: ${self:custom.vpc}
 
