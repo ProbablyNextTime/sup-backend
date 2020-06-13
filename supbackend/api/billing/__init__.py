@@ -3,7 +3,7 @@ import warnings
 from pprint import pprint
 import stripe
 from flask import current_app, request
-from flask_jwt_extended import jwt_required, current_user
+from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 from supbackend.api.billing.schema import InitiateCheckoutResponse
 from supbackend.db import db
@@ -49,7 +49,7 @@ def initiate_transportation_offer_checkout(transportation_offer_extid: str):
         "payment_method_types": ["card"],  # accept only cards for now
         "billing_address_collection": "auto",
         "customer": transportation_provider.stripe_customer_id,
-        "customer_email": current_user.email,
+        # "customer_email": current_user.email,
         "line_items": line_items,
         "payment_intent_data": {
             "metadata": {
